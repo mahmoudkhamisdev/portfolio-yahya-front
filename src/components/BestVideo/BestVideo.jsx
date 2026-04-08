@@ -5,7 +5,6 @@ import ButtonGlitch from '../../utils/ButtonGlitch/ButtonGlitch'
 import Loader from '../../utils/Loader/Loader'
 import YoutubeFrame from '../../utils/YoutubeFrame'
 import './BestVideo.css'
-import ReactPlayer from 'react-player'
 
 const BestVideo = ({ allData, allWork, dataLoading }) => {
 

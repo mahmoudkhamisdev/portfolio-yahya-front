@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Col, Modal, Row } from 'react-bootstrap'
 import { BiCommentDetail } from "react-icons/bi"
 import { useParams } from 'react-router-dom'
@@ -25,7 +25,7 @@ const ReelsDetails = () => {
     const [isDataLoading, setIsDataLoading] = useState(false);
     const [myComment, setmyComment] = useState('');
 
-    const getOneData = async () => {
+    const getOneData = useCallback(async () => {
         if (reelsId.id) {
             try {
                 const res = await GetData(`/api/v1/reels/${reelsId.id}`);
@@ -36,7 +36,7 @@ const ReelsDetails = () => {
                 setIsDataLoading(false)
             }
         }
-    };
+    }, [reelsId.id]);
 
     const handleAddLike = (e) => {
         setIsLike(!isLike)
@@ -49,7 +49,7 @@ const ReelsDetails = () => {
         });
     }
 
-    const getAllComments = async (e) => {
+    const getAllComments = useCallback(async (e) => {
         if (reelsId.id) {
             try {
                 const res = await GetData(`/api/v1/reels/${reelsId.id}/comments`);
@@ -59,7 +59,7 @@ const ReelsDetails = () => {
                 notify(err.response.data.msg || err.response.data.message || err.response.data.errors[0].msg, 'error');
             }
         }
-    }
+    }, [reelsId.id]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -95,7 +95,7 @@ const ReelsDetails = () => {
             });
         }
 
-    }, [reelsDetails.data?._id, isDataLoading])
+    }, [reelsDetails.data?._id, isDataLoading, getOneData, getAllComments])
 
     const handleAddComment = (e) => {
         e.preventDefault()

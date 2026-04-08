@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Button, Col, Row } from 'react-bootstrap'
 import SdebarAdmin from '../../../utils/SidebarAdmin'
 import notify from '../../../utils/useToastify'
 import { useParams } from 'react-router-dom'
 import { GetData } from '../../../api/Axios/useGetData'
 import ButtonGlitch from '../../../utils/ButtonGlitch/ButtonGlitch'
-import UploadImg from '../../../utils/UploadImg/UploadImg'
 import { EditDataImage } from '../../../api/Axios/useEditData'
 import { DateFormate } from '../../../utils/DateFormate'
 import './AdminUpdateReels.css'
@@ -44,7 +43,7 @@ const AdminUpdateReels = () => {
         });
     }
 
-    const getOneData = () => {
+    const getOneData = useCallback(() => {
         if (reelsId) {
             GetData(`/api/v1/reels/${reelsId.id}`).then(res => {
                 const myData = res.data.data
@@ -59,9 +58,9 @@ const AdminUpdateReels = () => {
                 notify(err.response.data.msg || err.response.data.message || err.response.data.errors[0].msg, 'error')
             });
         }
-    }
+    }, [reelsId]);
 
-    const getAllComments = async (e) => {
+    const getAllComments = useCallback(async (e) => {
         if (reelsId.id) {
             try {
                 const res = await GetData(`/api/v1/reels/${reelsId.id}/comments`);
@@ -71,12 +70,12 @@ const AdminUpdateReels = () => {
                 notify(err.response.data.msg || err.response.data.message || err.response.data.errors[0].msg, 'error');
             }
         }
-    }
+    }, [reelsId.id]);
 
     useEffect(() => {
         getOneData()
         getAllComments()
-    }, [])
+    }, [getOneData, getAllComments])
 
     const handleDeleteComment = (e, id) => {
         e.preventDefault()

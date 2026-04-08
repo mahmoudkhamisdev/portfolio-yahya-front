@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import TitleCard from '../TitleCard/TitleCard'
 import { Col, Row } from 'react-bootstrap'
 import { useParams } from 'react-router-dom'
@@ -11,7 +11,7 @@ const VideoDetails = () => {
     const workId = useParams('id')
     const [workDetails, setworkDetails] = useState([]);
 
-    const getOneData = () => {
+    const getOneData = useCallback(() => {
         if (workId) {
             GetData(`/api/v1/work/${workId.id}`).then(res => {
                 setworkDetails(res.data)
@@ -19,11 +19,11 @@ const VideoDetails = () => {
                 notify(err.response.data.msg || err.response.data.message || err.response.data.errors[0].msg, 'error')
             });
         }
-    }
+    }, [workId]);
 
     useEffect(() => {
         getOneData()
-    }, [])
+    }, [getOneData])
 
     return (
         <div className='main-bg1 rounded-5 '>

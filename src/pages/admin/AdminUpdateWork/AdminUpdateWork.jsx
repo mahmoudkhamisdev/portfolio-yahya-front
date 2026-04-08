@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import { useParams } from 'react-router-dom'
 import { EditData } from '../../../api/Axios/useEditData'
@@ -64,7 +64,7 @@ const AdminUpdateWork = () => {
         });
     }
 
-    const getOneData = () => {
+    const getOneData = useCallback(() => {
         if (workId) {
             GetData(`/api/v1/work/${workId.id}`).then(res => {
                 const myData = res.data.data
@@ -85,11 +85,11 @@ const AdminUpdateWork = () => {
                 notify(err.response.data.msg || err.response.data.message || err.response.data.errors[0].msg, 'error')
             });
         }
-    }
+    }, [workId]);
 
     useEffect(() => {
         getOneData()
-    }, [])
+    }, [getOneData])
 
     return (
         <Row className='adminWork'>

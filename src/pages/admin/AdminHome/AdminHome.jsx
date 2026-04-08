@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import UploadImg from '../../../utils/UploadImg/UploadImg'
 import ButtonGlitch from '../../../utils/ButtonGlitch/ButtonGlitch'
@@ -126,7 +126,7 @@ const AdminHome = () => {
         }
     }
 
-    const getOneData = () => {
+    const getOneData = useCallback(() => {
         if (dataId) {
             GetData(`/api/v1/userInfo/${dataId}`).then(res => {
                 const myData = res.data.data
@@ -147,11 +147,11 @@ const AdminHome = () => {
                 notify(err.response.data.msg || err.response.data.message || err.response.data.errors[0].msg, 'error')
             });
         }
-    }
+    }, [dataId]);
 
     useEffect(() => {
         getOneData()
-    }, [])
+    }, [getOneData])
 
 
     return (
